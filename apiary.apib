@@ -1,80 +1,345 @@
 FORMAT: 1A
-HOST: http://polls.apiblueprint.org/
+HOST: http://emp.vts.it/vts-ws-rest-api
 
 # ws2017
 
-Polls is a simple API allowing consumers to view polls and vote in them.
+Service Oriented Architecture specified for the WS project.
 
-## Questions Collection [/questions]
 
-### List All Questions [GET]
+## Vendors - DRAFT [/vendors]
+
+### Vendors collection [GET]
+
+Returns the list of vendors.
+
+This action is available to `WS_USER_READ` role.
+
++ Response 200 (application/json)
+  + Attributes (VendorListResult)
+
+## Departments - DRAFT [/departments]
+
+### Departments collection [GET]
+
+Returns the list of departments.
+
+This action is available to `WS_USER_READ` role.
+
++ Response 200 (application/json)
+  + Attributes (DepartmentListResult)
+
+## Locations - DRAFT [/locations]
+
+### Locations collection [GET]
+
+Returns the list of locations.
+
+This action is available to `WS_USER_READ` role.
+
++ Response 200 (application/json)
+  + Attributes (LocationListResult)
+
+## Employee types - DRAFT [/employeetypes]
+
+### Employee types collection [GET]
+
+Returns the list of employee types.
+
+This action is available to `WS_USER_READ` role.
+
++ Response 200 (application/json)
+  + Attributes (EmployeeTypeListResult)
+
+#######################
+# Group Employees - DRAFT
+#######################
+
+## Employees collection [/employees]
+
+### List of Employees [GET]
+
+Returns the list of VTS employees and Vendor Employess.
+
+This action is available to `WS_USER_READ` role.
+
++ Response 200 (application/json)
+  + Attributes (EmployeeListResult)
+
+
+## Employee [/employees/{id}]
+
++ Parameters
+    + id: ABC123 (required, number) - usercode of the user
+
++ Attributes (Employee1)
+
+### Read Employee [GET]
+
+Read detail for the specified employee.
+
+This action is available only to `WS_USER_READ` roles.
+
 
 + Response 200 (application/json)
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
-            }
-        ]
+    + Attributes (Employee1)
 
-### Create a New Question [POST]
-
-You may create your own question using this action. It takes a JSON
-object containing a question and a collection of answers in the
-form of choices.
-
-+ Request (application/json)
-
-        {
-            "question": "Favourite programming language?",
-            "choices": [
-                "Swift",
-                "Python",
-                "Objective-C",
-                "Ruby"
-            ]
-        }
-
-+ Response 201 (application/json)
-
-    + Headers
-
-            Location: /questions/2
++ Response 404
+    Returned when the required resource cannot be found.
 
     + Body
 
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 0
-                    }, {
-                        "choice": "Python",
-                        "votes": 0
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 0
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 0
-                    }
-                ]
-            }
++ Response 500
+    Returned when a generic error occours.
+
+    + Body
+  
+### Update Employee job role [PUT /employees/{id}/jobrole]
+
+Updates job role for the specified employee.
+
+This action is available only to `WS_WRITE` roles.
+
++ Parameters
+    + id: ABC123 (required, number) - usercode of the employee
+
++ Request (application/json)
+  + Attributes
+      + jobRole: `new job role` (required)
+
++ Response 200
+
++ Response 404
+    Returned when the required resource cannot be found.
+
+    + Body
+
++ Response 500
+    Returned when a generic error occours.
+
+    + Body
+  
+### Update Employee profession [PUT /employees/{id}/profession]
+
+Updates profession for the specified employee.
+
+This action is available only to `WS_WRITE` roles.
+
++ Parameters
+    + id: ABC123 (required, number) - usercode of the employee
+
++ Request (application/json)
+  + Attributes
+      + profession: `new profession` (required)
+
++ Response 200
+
++ Response 404
+    Returned when the required resource cannot be found.
+
+    + Body
+
++ Response 500
+    Returned when a generic error occours.
+
+    + Body
+  
+  
+#######################
+# Group Users - DRAFT
+#######################
+
+
+## Check user credentials [GET /users/checkUser{?userId}{?password}]
+
+Check passed credentials 
+
+This action is available only to `WS_USER_READ` roles.
+
++ Parameters
+    + userId: abc@domain.com - userId 
+    + password: xxxxxx - password
+
++ Response 200 (application/json)
+  + Attributes
+      + userCode: `ABC123` - User ID IAM
+
++ Response 200 (application/json)
+  + Attributes
+      + error: `Username and password check failed` 
+
+#######################
+# Data Structures
+#######################
+
+## PaginationData3 (object)
++ paginationData (object, required) - Informations required for pagination
+    + count: 3 (number,required) - total number of resources
+    + pageNum: 1 (number, required) - slice of resources returned
+    + pageSize: 999999999 (number, required) - size of the slice
+
+## PaginationData4 (object)
++ paginationData (object, required) - Informations required for pagination
+    + count: 4 (number,required) - total number of resources
+    + pageNum: 1 (number, required) - slice of resources returned
+    + pageSize: 999999999 (number, required) - size of the slice
+
+
+## Vendor1 (object)
++ id: 1 (number) - vendor id
++ functionId: `VMP_VND` (enum[string],required) - function code VMP_VND=Vendors,VMP_SUB=Subcontractors
++ masterCode : `4000308` (required, string) - master code
++ name: `A1 TELEKOM AUSTRIA AG` (required, string) - company name
++ status (VendorStatus1)  (required, string) - status object
++ code : `4000308` (required, string) - same as master code
+
+## Vendor2 (object)
++ id: 2 (required, number)
++ functionId: `VMP_VND` (enum[string],required) - function code VMP_VND=Vendors,VMP_SUB=Subcontractors
++ masterCode : `4000477` (required, string)
++ name: `ADECCO ITALIA SPA` (required, string)
++ status (VendorStatus1)
++ code : `4000477` 
+
+
+## Vendor3 (object)
++ id: 3 (required, number)
++ functionId: `VMP_VND` (enum[string],required) - function code VMP_VND=Vendors,VMP_SUB=Subcontractors
++ masterCode : `4000477` (required, string)
++ name: `SODEXO` (required, string)
++ status (VendorStatus1)
++ code : `4000477` 
+
+## VendorListResult (object)
++ results (array[Vendor1, Vendor2, Vendor3], required) - array of Vendors
++ Include PaginationData3
+
+## VendorStatus1 (object)
++ id: `001` (required, string) - status code
++ description: `Active` - status description
++ disposal: false - indicate if status is related to disposal of entity
+
+
+## Department1 (object)
++ id: XL00001
++ description: Department XL00001
++ status: Y
+
+## Department2 (object)
++ id: XL00002
++ description: Department XL00002
++ status: N
+
+## Department3 (object)
++ id: XL00003
++ description: Department XL00003
++ status: Y
+
+## Department4 (object)
++ id: XL00004
++ description: Department XL00004
++ status: Y
+
+
+## DepartmentListResult (object)
++ results (array[Department1, Department2, Department3, Department4], required) - array of Departments
++ Include PaginationData4
+
+
+## Location1 (object)
++ id: 12
++ street: Via del plebiscito 25
++ city: Padova
++ state: PD
++ zip: 35100
++ country: Italy
+
+## Location2 (object)
++ id: 20
++ street: Via Mazzini 25
++ city: Roma
++ state: RM
++ zip: 00195
++ country: Italy
+
+## Location3 (object)
++ id: 4
++ street: Via Garibaldi 5
++ city: Milano
++ state: RM
++ zip: 23445
++ country: Italy
+
+## LocationListResult (object)
++ results (array[Location1, Location2, Location3], required) - array of Locations
++ Include PaginationData3
+
+## EmployeeType1 (object)
++ id: EXT
++ description: Extended Team IBM
+
+## EmployeeType2 (object)
++ id: LOA
++ description: IBM LOA
+
+## EmployeeType3 (object)
++ id: EMP
++ description: V-TS Employee
+
+## EmployeeTypeListResult (object)
++ results (array[EmployeeType1, EmployeeType2, EmployeeType3], required) - array of Employee types
++ Include PaginationData3
+
+
+## Employee1 (object)
++ id: 1
++ firstName: first name
++ lastName: last name
++ userCode: user code
++ email1: email 1  
++ email2: email 2
++ employeeType: Extended Team IBM
++ hiringDate: `2016-04-01` (string)
++ dismissDate: `2016-04-01` (string)
++ department: code description
++ status: active inactive
++ vendorCode: 50000001
++ locationCode: 123
+
+
+## Employee2 (object)
++ id: 2
++ firstName: first name
++ lastName: last name
++ userCode: user code
++ email1: email 1  
++ email2: email 2
++ employeeType: Extended Team IBM
++ hiringDate: `2016-04-01` (string)
++ dismissDate: `2016-04-01` (string)
++ department: code description
++ status: active inactive
++ vendorCode: 50000001
++ locationCode: 123
+
+## Employee3 (object)
++ id: 3
++ firstName: first name
++ lastName: last name
++ userCode: user code
++ email1: email 1  
++ email2: email 2
++ employeeType: Extended Team IBM
++ hiringDate: `2016-04-01` (string)
++ dismissDate: `2016-04-01` (string)
++ department: code description
++ status: active inactive
++ vendorCode: 50000001
++ locationCode: 123
+
+## EmployeeListResult (object)
++ results (array[Employee1, Employee2, Employee3], required) - array of Employees
++ Include PaginationData3
+
+
+
