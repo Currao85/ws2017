@@ -6,7 +6,7 @@ HOST: http://emp.vts.it/vts-ws-rest-api
 Service Oriented Architecture specified for the WS project.
 
 
-## Vendors - DRAFT [/vendors]
+## Vendors [/vendors]
 
 ### Vendors collection [GET]
 
@@ -17,7 +17,7 @@ This action is available to `WS_USER_READ` role.
 + Response 200 (application/json)
   + Attributes (VendorListResult)
 
-## Departments - DRAFT [/departments]
+## Departments [/departments]
 
 ### Departments collection [GET]
 
@@ -28,7 +28,7 @@ This action is available to `WS_USER_READ` role.
 + Response 200 (application/json)
   + Attributes (DepartmentListResult)
 
-## Locations - DRAFT [/locations]
+## Locations [/locations]
 
 ### Locations collection [GET]
 
@@ -39,7 +39,7 @@ This action is available to `WS_USER_READ` role.
 + Response 200 (application/json)
   + Attributes (LocationListResult)
 
-## Employee types - DRAFT [/employeetypes]
+## Employee types [/employeetypes]
 
 ### Employee types collection [GET]
 
@@ -51,14 +51,14 @@ This action is available to `WS_USER_READ` role.
   + Attributes (EmployeeTypeListResult)
 
 #######################
-# Group Employees - DRAFT
+# Group Employees
 #######################
 
 ## Employees collection [/employees]
 
 ### List of Employees [GET]
 
-Returns the list of VTS employees and Vendor Employess.
+Returns the list of VTS employees and Vendor Employees.
 
 This action is available to `WS_USER_READ` role.
 
@@ -66,10 +66,10 @@ This action is available to `WS_USER_READ` role.
   + Attributes (EmployeeListResult)
 
 
-## Employee [/employees/{id}]
+## Employee [/employees/{userId}]
 
 + Parameters
-    + id: ABC123 (required, number) - usercode of the user
+    + userId: US099971 (required, string) - usercode of the user
 
 + Attributes (Employee1)
 
@@ -94,20 +94,25 @@ This action is available only to `WS_USER_READ` roles.
 
     + Body
   
-### Update Employee job role [PUT /employees/{id}/jobrole]
+### Update Employee job role [PUT /employees/{userId}/jobrole]
 
 Updates job role for the specified employee.
 
-This action is available only to `WS_WRITE` roles.
+This action is available only to `WS_USER_WRITE` roles.
 
 + Parameters
-    + id: ABC123 (required, number) - usercode of the employee
+    + userId: US099971 (required, number) - usercode of the employee
 
 + Request (application/json)
   + Attributes
-      + jobRole: `new job role` (required)
+      + jobRole: `new job role` (required, string) - new job role (max 512 char)
 
 + Response 200
+
++ Response 400
+    Returned when input does not pass validation.
+
+    + Body
 
 + Response 404
     Returned when the required resource cannot be found.
@@ -119,20 +124,25 @@ This action is available only to `WS_WRITE` roles.
 
     + Body
   
-### Update Employee profession [PUT /employees/{id}/profession]
+### Update Employee profession [PUT /employees/{userId}/profession]
 
 Updates profession for the specified employee.
 
-This action is available only to `WS_WRITE` roles.
+This action is available only to `WS_USER_WRITE` roles.
 
 + Parameters
-    + id: ABC123 (required, number) - usercode of the employee
+    + userId: US099971 (required, number) - usercode of the employee
 
 + Request (application/json)
   + Attributes
-      + profession: `new profession` (required)
+      + profession: `new profession` (required, string) - new profession (max 512 char)
 
 + Response 200
+
++ Response 400
+    Returned when input does not pass validation.
+
+    + Body
 
 + Response 404
     Returned when the required resource cannot be found.
@@ -146,7 +156,7 @@ This action is available only to `WS_WRITE` roles.
   
   
 #######################
-# Group Users - DRAFT
+# Group Users
 #######################
 
 
@@ -157,12 +167,12 @@ Check passed credentials
 This action is available only to `WS_USER_READ` roles.
 
 + Parameters
-    + userId: abc@domain.com - userId 
+    + userId: `abc@domain.com` - userId 
     + password: xxxxxx - password
 
 + Response 200 (application/json)
   + Attributes
-      + userCode: `ABC123` - User ID IAM
+      + userCode: `US099971` - User ID IAM
 
 + Response 200 (application/json)
   + Attributes
@@ -221,24 +231,36 @@ This action is available only to `WS_USER_READ` roles.
 
 
 ## Department1 (object)
-+ id: XL00001
-+ description: Department XL00001
-+ status: Y
++ ouCode: XL78506 (string) - department code 
++ ouName: Finance and Planning (string) - department name
++ status: Y (string) - ou status in current Hierarchical active revision (Y=active, N=inactive) 
++ parentOuCode: XL78486 (string) - parent department code in current Hierarchical active revision 
++ managerId: 33 (number) - department manager internal employee id (in current Hierarchical active revision) 
++ managerUserCode : XL99999 (string) - department manager usercode (in current Hierarchical active revision)
 
 ## Department2 (object)
-+ id: XL00002
-+ description: Department XL00002
++ id: XL78521
++ description: Unit Network Italy
 + status: N
++ parentOuCode: 
++ managerId:  
++ managerUserCode : 
 
 ## Department3 (object)
-+ id: XL00003
-+ description: Department XL00003
++ id: XL78522
++ description: Unit Network Germany
 + status: Y
++ parentOuCode: XL78486 
++ managerId: 25 
++ managerUserCode : XL99998 
 
 ## Department4 (object)
-+ id: XL00004
-+ description: Department XL00004
++ id: XL78531
++ description: Service Reliability Germany
 + status: Y
++ parentOuCode: XL78486 
++ managerId: 322 
++ managerUserCode : XL99997 
 
 
 ## DepartmentListResult (object)
@@ -247,12 +269,12 @@ This action is available only to `WS_USER_READ` roles.
 
 
 ## Location1 (object)
-+ id: 12
-+ street: Via del plebiscito 25
-+ city: Padova
-+ state: PD
-+ zip: 35100
-+ country: Italy
++ id: 12 (number) - location code
++ street: Via del plebiscito 25 (string) - location address
++ city: Padova (string) - location city
++ state: PD (string) - location state
++ zip: 35100 (string) - location zip
++ country: Italy (string) - location country description
 
 ## Location2 (object)
 + id: 20
@@ -275,8 +297,8 @@ This action is available only to `WS_USER_READ` roles.
 + Include PaginationData3
 
 ## EmployeeType1 (object)
-+ id: EXT
-+ description: Extended Team IBM
++ id: EXT (string) - Employee type code
++ description: Extended Team IBM (string) - Employee type description
 
 ## EmployeeType2 (object)
 + id: LOA
@@ -292,50 +314,61 @@ This action is available only to `WS_USER_READ` roles.
 
 
 ## Employee1 (object)
-+ id: 1
-+ firstName: first name
-+ lastName: last name
-+ userCode: user code
-+ email1: email 1  
-+ email2: email 2
-+ employeeType: Extended Team IBM
-+ hiringDate: `2016-04-01` (string)
-+ dismissDate: `2016-04-01` (string)
-+ department: code description
-+ status: active inactive
-+ vendorCode: 50000001
-+ locationCode: 123
-
++ id: 1 (number) - employee internal id
++ firstName: Fabio (string) - first name
++ lastName: Gabbia (string) - last name 
++ userCode: US099974 (string) - user id 
++ email: example@it.ibm.com (string) - primary email
++ altInternetAddress : `example@v-tsservices.unicredit.eu` (string) - secondary email 
++ notesAddress : `example/Italy/V-TServices/IJV` (string) - notes address 
++ employeeType: Extended Team IBM (string) - employee type description
++ startDate: `2016-04-01` (string) - hiring date
++ dismissDate: `2016-04-01` (string) - dismiss date
++ ouCode: XJ99004 (string) - Organization unit code (in current uo revision)
++ ouName: Austria HR (string) - Organization unit name (in current uo revision)
++ isManager: false (boolean) - true if employee is manager of the OU 
++ managerUserCode : US099976 (string) - user code of the manager
++ status: INACTIVE (string) - status ACTIVE/INACTIVE 
++ vendorCode: 50000001 (string) - master code of vendor (evaluated only for vendor employees)
++ locationCode: (number) - location id (evaluated only for vts employees)
 
 ## Employee2 (object)
-+ id: 2
-+ firstName: first name
-+ lastName: last name
-+ userCode: user code
-+ email1: email 1  
-+ email2: email 2
-+ employeeType: Extended Team IBM
-+ hiringDate: `2016-04-01` (string)
-+ dismissDate: `2016-04-01` (string)
-+ department: code description
-+ status: active inactive
-+ vendorCode: 50000001
-+ locationCode: 123
++ id: 2 (number) - employee internal id
++ firstName: Antonio (string) - first name
++ lastName: Cortese (string) - last name 
++ userCode: US099970 (string) - user id 
++ email: `antonio.cortese_v-tsservices@it.ibm.com` (string) - primary email
++ altInternetAddress : `antonio.cortese@v-tsservices.unicredit.eu` (string) - secondary email 
++ notesAddress : (string) - notes address 
++ employeeType: `V-TS Employee` (string) - employee type description
++ startDate: `2010-02-01` (string) - hiring date
++ dismissDate: (string) - dismiss date
++ ouCode: XL78513 (string) - Organization unit code (in current uo revision)
++ ouName: Service Line Network SIL (string) - Organization unit name (in current uo revision)
++ isManager: true (boolean) - true if employee is manager of the OU 
++ managerUserCode : US099976 (string) - user code of the manager
++ status: ACTIVE (string) - status ACTIVE/INACTIVE 
++ vendorCode: (string) - master code of vendor (evaluated only for vendor employees)
++ locationCode: 3 (number) - location id (evaluated only for vts employees)
 
 ## Employee3 (object)
-+ id: 3
-+ firstName: first name
-+ lastName: last name
-+ userCode: user code
-+ email1: email 1  
-+ email2: email 2
-+ employeeType: Extended Team IBM
-+ hiringDate: `2016-04-01` (string)
-+ dismissDate: `2016-04-01` (string)
-+ department: code description
-+ status: active inactive
-+ vendorCode: 50000001
-+ locationCode: 123
++ id: 3 (number) - employee internal id
++ firstName: Lucia (string) - first name
++ lastName: Del campo (string) - last name 
++ userCode: US099971 (string) - user id 
++ email: `lucia.delcampo_v-tsservices@it.ibm.com` (string) - primary email
++ altInternetAddress : `lucia.delcampo@v-tsservices.unicredit.eu` (string) - secondary email 
++ notesAddress : (string) - notes address 
++ employeeType: Extended Team IBM (string) - employee type description
++ startDate: `2005-06-01` (string) - hiring date
++ dismissDate: (string) - dismiss date
++ ouCode: XJ99011 (string) - Organization unit code (in current uo revision)
++ ouName: Austria Procurement (string) - Organization unit name (in current uo revision)
++ isManager: false (boolean) - true if employee is manager of the OU 
++ managerUserCode : US099976 (string) - user code of the manager
++ status: ACTIVE (string) - status ACTIVE/INACTIVE 
++ vendorCode: 50000002 (string) - master code of vendor (evaluated only for vendor employees)
++ locationCode: (number) - location id (evaluated only for vts employees)
 
 ## EmployeeListResult (object)
 + results (array[Employee1, Employee2, Employee3], required) - array of Employees
