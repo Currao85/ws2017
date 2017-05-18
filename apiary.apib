@@ -160,15 +160,17 @@ This action is available only to `WS_USER_WRITE` roles.
 #######################
 
 
-## Check user credentials [GET /users/checkUser{?userId}{?password}]
+## Check user credentials [POST /users/checkUser{?userId}{?password}]
 
 Check passed credentials 
 
 This action is available only to `WS_USER_READ` roles.
 
-+ Parameters
-    + userId: `abc@domain.com` - userId 
-    + password: xxxxxx - password
++ Request (application/json)
+  + Attributes
+      + userId: `abc@domain.com` (required, string) - userId 
+      + password: xxxxxch x (required, string) - password
+
 
 + Response 200 (application/json)
   + Attributes
