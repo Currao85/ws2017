@@ -65,6 +65,18 @@ This action is available to `WS_USER_READ` role.
 + Response 200 (application/json)
   + Attributes (EmployeeListResult)
 
+### File of VTS Employees list [GET /employees/input.user]
+
+Generates the file (in delimiter separated record format) with list of VTS employees in current Hierarchical revision . the destination file path and name are specified in application configuration file. 
+
+This action is available to everyone .
+
++ Response 200 (text/plain)
+  File generated with success
+
++ Response 500
+  An exception occured during the generation of the file
+
 
 ## Employee [/employees/{userId}]
 
@@ -179,6 +191,35 @@ This action is available only to `WS_USER_READ` roles.
 + Response 200 (application/json)
   + Attributes
       + error: `Username and password check failed` 
+
+#######################
+# Group Tree Organizations
+#######################
+
+
+### File of Organization Unit list [GET /ous/input.org_unit]
+
+Generates the file (in delimiter separated record format) with list of Organization unit in current Hierarchical revision . For each organization unit hierarchical tree data are reported. the destination file path and name are specified in application configuration file. 
+
+This action is available to everyone .
+
++ Response 200 (text/plain)
+  File generated with success
+
++ Response 500
+  An exception occured during the generation of the file
+
+### File of Organization Unit Manager list [GET /ous/input.org_unit_manager]
+
+Generates the file (in delimiter separated record format) with list of Organization unit managers in current Hierarchical revision . For each organization unit hierarchical managers informations are reported. the destination file path and name are specified in application configuration file. 
+
+This action is available to everyone .
+
++ Response 200 (text/plain)
+  File generated with success
+
++ Response 500
+  An exception occured during the generation of the file
 
 #######################
 # Data Structures
